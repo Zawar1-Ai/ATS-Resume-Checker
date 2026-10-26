@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg" />
+    <title>ATS Resume Checker — Free, No Signup</title>
+    <meta name="description" content="Free ATS resume checker for beginners and remote job seekers. Paste your resume and the job description to get an instant match score, missing keywords, and fixes. No signup, nothing uploaded." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body>
+    <div class="wrap">
+
+      <section class="intro">
+        <h1>Check your resume the way the hiring software sees it</h1>
+        <p>Most companies — including remote ones — filter resumes with an ATS (Applicant Tracking System) before a human ever reads them. Paste your resume and the job description below to get an instant match score, the keywords you're missing, and exactly what to fix. Built for beginners and first-time remote job seekers.</p>
+        <div class="trust-row">
+          <span><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2.5 8.5 6 12 13.5 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>100% free</span>
+          <span><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2.5 8.5 6 12 13.5 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>No signup or email needed</span>
+          <span><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2.5 8.5 6 12 13.5 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Your resume never leaves your browser</span>
+        </div>
+      </section>
+
+      <section class="tool" aria-label="ATS resume checker tool">
+        <p class="step-label">Step 1 — Pick the job you're aiming for</p>
+        <div class="role-row" role="group" aria-label="Target role">
+          <button type="button" class="role-btn" data-role="customer-support" aria-pressed="false">Customer Support</button>
+          <button type="button" class="role-btn" data-role="data-entry" aria-pressed="false">Data Entry</button>
+          <button type="button" class="role-btn" data-role="virtual-assistant" aria-pressed="false">Virtual Assistant</button>
+          <button type="button" class="role-btn" data-role="sales" aria-pressed="false">Sales Representative</button>
+          <button type="button" class="role-btn" data-role="chat-support" aria-pressed="false">Chat Support</button>
+        </div>
+
+        <p class="step-label">Step 2 — Paste your resume and the job post</p>
+        <div class="fields">
+          <div class="field">
+            <label for="resumeInput">Your resume</label>
+            <p class="hint">Open your resume, select all the text, copy and paste it here.</p>
+            <textarea id="resumeInput" placeholder="Paste your resume text here…" spellcheck="false"></textarea>
+            <div class="field-foot">
+              <button type="button" class="file-link" id="resumeFileBtn">Upload a .txt file instead</button>
+              <span id="resumeCount">0 words</span>
+            </div>
+            <input type="file" id="resumeFile" accept=".txt,text/plain" hidden />
+          </div>
+          <div class="field">
+            <label for="jdInput">The job description <span class="optional-label">(optional)</span></label>
+            <p class="hint">Copy the full job post you're applying to. No job post yet? Pick a role above and we'll check against what those employers usually ask for.</p>
+            <textarea id="jdInput" placeholder="Paste the job description here…" spellcheck="false"></textarea>
+            <div class="field-foot">
+              <button type="button" class="file-link" id="jdFileBtn">Upload a .txt file instead</button>
+              <span id="jdCount">0 words</span>
+            </div>
+            <input type="file" id="jdFile" accept=".txt,text/plain" hidden />
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="btn-primary" id="checkBtn">Check my resume</button>
+          <button type="button" class="btn-ghost" id="sampleBtn">Try it with a sample resume</button>
+        </div>
+        <div class="form-error" id="formError" role="alert"></div>
+        <p class="privacy-note"><strong>Private by design:</strong> the check runs entirely on this page, in your browser. Your resume is not uploaded, stored, or sent anywhere.</p>
+      </section>
+
+      <section id="results" aria-live="polite">
+        <div class="score-card">
+          <div class="gauge" aria-hidden="true">
+            <svg width="180" height="180" viewBox="0 0 180 180">
+              <circle class="track" cx="90" cy="90" r="80" fill="none" stroke-width="13" />
+              <circle class="bar" id="gaugeBar" cx="90" cy="90" r="80" fill="none" stroke-width="13" stroke-linecap="round" stroke-dasharray="502.65" stroke-dashoffset="502.65" />
+            </svg>
+            <div class="gauge-num"><b id="scoreNum">0</b><span>out of 100</span></div>
+          </div>
+          <div class="score-verdict">
+            <h2 id="verdictTitle"></h2>
+            <p id="verdictText"></p>
+            <p class="score-basis" id="scoreBasis"></p>
+            <details class="score-details">
+              <summary>How this estimate is calculated</summary>
+              <p>Keywords contribute up to 40 points based on the share matched; sections contribute 20; contact details, length, action verbs, and numbers contribute 10 each. Length earns full points at 300–800 words, while verbs and numbers reach their caps at six and three matches. The checks are simple text heuristics, not an ATS ranking or an interview prediction.</p>
+              <ul class="score-breakdown">
+                <li><span>Job keywords</span><strong id="scoreKeywords">0/40</strong></li>
+                <li><span>Resume sections</span><strong id="scoreSections">0/20</strong></li>
+                <li><span>Contact details</span><strong id="scoreContact">0/10</strong></li>
+                <li><span>Resume length</span><strong id="scoreLength">0/10</strong></li>
+                <li><span>Action verbs</span><strong id="scoreVerbs">0/10</strong></li>
+                <li><span>Numbers in results</span><strong id="scoreNumbers">0/10</strong></li>
+              </ul>
+            </details>
+          </div>
+        </div>
+
+        <div class="result-grid">
+          <div class="panel">
+            <h3>Resume checks</h3>
+            <p class="sub">The basics every ATS and recruiter looks for first.</p>
+            <ul class="check-list" id="checkList"></ul>
+          </div>
+          <div class="panel">
+            <h3>Strength of your bullets</h3>
+            <p class="sub">Recruiters scan for action verbs and real numbers. So do hiring managers.</p>
+            <div class="stat-row">
+              <div class="stat"><b id="statWords">0</b><span>Words</span></div>
+              <div class="stat"><b id="statVerbs">0</b><span>Action verbs</span></div>
+              <div class="stat"><b id="statNumbers">0</b><span>Results with numbers</span></div>
+            </div>
+            <ul class="check-list strength-list" id="strengthList"></ul>
+          </div>
+          <div class="panel panel-wide">
+            <h3>Keyword match</h3>
+            <p class="sub" id="kwSub"></p>
+            <div class="kw-block">
+              <h4 id="hitTitle">Keywords found in your resume</h4>
+              <div class="pills" id="hitPills"></div>
+              <h4 id="missTitle">Missing keywords — add the ones you honestly have</h4>
+              <div class="pills" id="missPills"></div>
+              <p class="kw-empty" id="kwEmpty"></p>
+              <p class="missing-tip">Where to add a missing keyword: put tools and hard skills in your <strong>Skills</strong> section, and work the rest into the bullet points of the job or project where you actually used them. Never add a skill you don't have — you'll be asked about it in the interview.</p>
+            </div>
+            <div class="report-actions">
+              <button type="button" class="btn-primary btn-compact" id="copyBtn">Copy my fix list</button>
+              <button type="button" class="btn-ghost" id="downloadBtn">Download report (.txt)</button>
+              <span class="copy-ok" id="copyOk">Copied — paste it anywhere to keep it.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="guide">
+        <h2>How to use this checker</h2>
+        <div class="steps">
+          <div class="step">
+            <span class="n">STEP 1</span>
+            <h4>Paste both texts</h4>
+            <p>Your resume on the left, the job description on the right. The closer the job post, the more useful the keyword match.</p>
+          </div>
+          <div class="step">
+            <span class="n">STEP 2</span>
+            <h4>Read your score</h4>
+            <p>The estimate combines keyword match, resume sections, contact details, length, action verbs, and numbers. It is a checklist—not an ATS ranking or a guarantee.</p>
+          </div>
+          <div class="step">
+            <span class="n">STEP 3</span>
+            <h4>Fix, then re-check</h4>
+            <p>Add the missing keywords you honestly have, fix the failed checks, and run it again. Aim for 75+ before you apply.</p>
+          </div>
+        </div>
+
+        <h3>What is an ATS, and why does it reject good people?</h3>
+        <p>An Applicant Tracking System (ATS) helps employers collect and manage applications. The features and screening rules vary between employers and products; some may search for terms from a job post, but there is no single scoring rule used by every ATS. <strong>This checker compares resume text with common job-post terms and checks a few basic resume signals.</strong> It can help you review your wording, but it cannot reproduce an employer's system or predict whether a recruiter will see your application.</p>
+
+        <h3>The 6 mistakes that get beginner resumes filtered out</h3>
+        <ul>
+          <li><strong>One generic resume for every job.</strong> Each job post uses different words. Mirror the words of the specific post you're applying to — that's the whole game.</li>
+          <li><strong>No Skills section.</strong> The ATS looks for a clear list of tools and skills. Burying "Excel" inside a paragraph is easy to miss; a Skills line is not.</li>
+          <li><strong>Duties instead of results.</strong> "Responsible for answering emails" says what the job was. "Answered 60+ customer emails a day with a 98% satisfaction rating" says how well you did it — and adds keywords and numbers in one move.</li>
+          <li><strong>Fancy formatting.</strong> Tables, text boxes, columns, headers/footers, and images can scramble your text when the ATS reads it. One column, standard headings, a normal font.</li>
+          <li><strong>Missing contact details.</strong> No email or phone number on the resume itself means the recruiter can't reach you even if you pass the filter.</li>
+          <li><strong>Wrong length.</strong> Under 200 words usually means missing content; over 1,000 usually means padding. For a beginner, one focused page — roughly 300–700 words — is the sweet spot.</li>
+        </ul>
+
+        <h3>No experience? You still have keywords</h3>
+        <p>School projects, volunteer work, family business help, freelance gigs, and personal projects all count as places to use real skills. If you managed a class project's spreadsheet, that's <strong>data entry and Microsoft Excel</strong>. If you ran a small Instagram shop for a relative, that's <strong>customer service, order processing, and social media</strong>. Describe what you actually did, with the employer's words for it — that's honest, and it's how beginners pass the filter.</p>
+
+        <h3>Frequently asked questions</h3>
+        <div class="faq">
+          <details>
+            <summary>Is this checker really free? What's the catch?</summary>
+            <p>Yes, fully free — no signup, no email, no limit, no watermark. The full result is on this page. It runs in your browser, so it costs almost nothing to offer.</p>
+          </details>
+          <details>
+            <summary>Is my resume private?</summary>
+            <p>Yes. The analysis happens in your browser using code on this page. Nothing you paste is uploaded, saved, or sent to a server — you can even disconnect from the internet after the page loads and it still works.</p>
+          </details>
+          <details>
+            <summary>What score do I need before applying?</summary>
+            <p>Use the score as a checklist, not a pass/fail cutoff. Review the category breakdown and missing keywords, then decide whether each suggestion accurately reflects your experience. Different employers and ATS products evaluate resumes differently.</p>
+          </details>
+          <details>
+            <summary>Should I copy the whole job description into my resume to get 100?</summary>
+            <p>No. Keyword stuffing is obvious to recruiters and can get you rejected at the human stage. Add the keywords you genuinely have, in sentences that describe real work you did.</p>
+          </details>
+          <details>
+            <summary>What file format should I send to employers?</summary>
+            <p>Follow the job post: if it asks for PDF, send PDF; if it doesn't say, a simple .docx or PDF from a one-column document both read well. Avoid Canva-style multi-column designs for ATS applications — they look great and parse badly.</p>
+          </details>
+          <details>
+            <summary>I have no job description yet. How should I use this?</summary>
+            <p>Pick your target role at the top of the tool. You'll be checked against the skills and keywords employers most commonly ask for in that role, so you can strengthen your resume before you start applying.</p>
+          </details>
+        </div>
+
+        <div class="crosslink">
+          <p>New to remote work? Start with the beginner guides on our blog — the best no-experience remote jobs, how applications work, and how to spot job scams before you apply.</p>
+          <a href="https://remotejobsforbeginners.blogspot.com/" target="_blank" rel="noopener">Visit Remote Jobs for Beginners →</a>
+        </div>
+      </section>
+
+      <footer>
+        <p><strong>Honest limits:</strong> this checker estimates how well your resume matches a job post and common ATS rules. Every company's ATS works a little differently, and no tool can guarantee an interview or a job. Use the score to fix real weaknesses — the rest is your experience and your interview.</p>
+        <p>Your text is processed only in your browser and is never stored. Made for beginner and remote job seekers.</p>
+      </footer>
+
+    </div>
+
+    <script src="assets/js/app.js" defer></script>
+  </body>
+</html>
